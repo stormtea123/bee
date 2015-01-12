@@ -77,10 +77,10 @@ define([
                     dataType: "jsonp",
                     data: {
                         user: currentUser,
-                        type: event.type ? event.type : "",
+                        type: event.type || "1",
                         title: event.title,
-                        remark: event.remark ? event.remark : "",
-                        status: event.status ? event.status : "",
+                        remark: event.remark || "",
+                        status: event.status || "1",
                         start: start.format(),
                         end: event._allDay ? start.add("1", "days").format() : start.add("2", "h").format()
                     },

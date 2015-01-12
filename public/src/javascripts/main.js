@@ -1,10 +1,10 @@
 require.config({
-    baseUrl: "/javascripts/",
+    //baseUrl: "",
     paths: {
         jquery: 'lib/jquery.min',
         underscore: 'lib/underscore',
         backbone: 'lib/backbone',
-        moment: 'lib/moment.min',
+        moment: 'lib/moment',
         fullcalendar: 'lib/fullcalendar',
         jqueryUI: 'lib/jquery-ui',
         handlebars: 'lib/handlebars',

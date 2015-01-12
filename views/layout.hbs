@@ -3,9 +3,9 @@
   <head>
     <title>{{title}}</title>
     <meta charset="utf-8" />
-    <link rel='stylesheet' href='/stylesheets/jquery-ui.css' />
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='/stylesheets/fullcalendar.css' />
+    <link rel='stylesheet' href='/build/stylesheets/jquery-ui.css' />
+    <link rel='stylesheet' href='/build/stylesheets/style.css' />
+    <link rel='stylesheet' href='/build/stylesheets/fullcalendar.css' />
     <script>var currentUser = "{{user.name}}";</script>
   </head>
   <body>
@@ -13,7 +13,7 @@
       <header class="header">
         <div class="header-main">
           <div class="header-user">
-            <div class="header-user-pic"><a href="#"><img class="ui-border-box header-user-img" src="/images/head.png" width="80" height="80" alt=""></a></div>
+            <div class="header-user-pic"><a href="#"><img class="ui-border-box header-user-img" src="/build/images/head.png" width="80" height="80" alt=""></a></div>
             <h6 class="header-user-name">admin</h6>
           </div>
           <nav class="navigation">
@@ -54,7 +54,7 @@
                     <span class="bar-more-txt">发送邮件</span></a>
                   </li>
                   <li class="ui-border-box bar-more-item">
-                    <a href="#archive/user/admin"><span class="bar-more-icon ui-iconfont">&#xe604;</span>
+                    <a href="#" id="bar-more-week"><span class="bar-more-icon ui-iconfont">&#xe604;</span>
                     <span class="bar-more-txt">周报</span></a>
                   </li>
                   <li class="ui-border-box bar-more-item">
@@ -82,6 +82,6 @@
         <div class="footer">Powered by <code>p_jdjbli</code>&copy;2014-2125<br />All rights reserved</div>
       </div>
     </div>
-    <script data-main="/javascripts/main" src="/javascripts/lib/require.js"></script>
+    <script data-main="/build/javascripts/main" src="/build/javascripts/lib/require.js"></script>
   </body>
 </html>

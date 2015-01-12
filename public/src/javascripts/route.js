@@ -26,9 +26,11 @@ define([
                 willHtml += '<li class="recently-event">' + recentlyArray[i].title + '</li>';
             }
             $("#recently-events").html(willHtml)
-            $('#recently-events .recently-event').each(function() {
+            $('#recently-events .recently-event').each(function(i,element) {
                 $(this).data('event', {
                     title: $.trim($(this).text()),
+                    type: recentlyArray[i].type,
+                    status: recentlyArray[i].status,
                     stick: true
                 });
                 $(this).draggable({
@@ -49,11 +51,13 @@ define([
     var locationHash = location.hash;
     var matchGroupRule = /archive\/group\/([^\/]+)/;
     var matchGroupName = matchGroupRule.test(locationHash) ? matchGroupRule.exec(locationHash)[1] : "test";
+    $("#bar-more-mail").attr("href", '#groupTomail/' + matchGroupName + '/' + startInitDay + '/' + endInitDay);
     $(window).bind('hashchange', function() {
-        //console.log("hashchange")
-        matchGroupName = matchGroupRule.test(locationHash) ? matchGroupRule.exec(locationHash)[1] : "test";
+        matchGroupName = matchGroupRule.test(location.hash) ? matchGroupRule.exec(location.hash)[1] : "test";
+        $("#bar-more-mail").attr("href", '#groupTomail/' + matchGroupName + '/' + startInitDay + '/' + endInitDay);
     });
-    $("#bar-more-mail").attr("href", '#groupTomail/' + matchGroupName + '/' + startInitDay + '/' + endInitDay)
+    
+    $("#bar-more-week").attr("href", '#archive/user/' + currentUser + '/' + startInitDay + '/' + endInitDay);
         //显示最近创建的事件列表
     $("#bar-menu-btn").click(function(event) {
         event.preventDefault();
@@ -382,7 +386,6 @@ define([
         },
         //切换视图
         changeView: function(view) {
-            console.log(view);
             if (this.currentView) {
                 console.log(this.currentView)
                 if (this.currentView == view) {
