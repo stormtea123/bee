@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/jquery-ui.css' />
+    <script>var currentUser = "{{user.name}}";</script>
+  </head>
+  <body>
+    <div class="login">
+        <h1 class="login-tit">{{title}}</h1>
+        <form method="post" class="ui-form login-form">
+            <table>
+                <tr>
+                    <td class="ui-tag">用户名：</td>
+                    <td>
+                        <input class="ui-control ui-control-box ui-control-full" type="text" name="name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-tag">密码：</td>
+                    <td>
+                        <input class="ui-control ui-control-box ui-control-full" type="password" name="password" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-tag"></td>
+                    <td>
+                        <input type="submit" class="ui-button ui-button-primary" value="登陆">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>  </body>
+</html>
+
+
