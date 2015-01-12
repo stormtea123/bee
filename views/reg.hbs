@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/jquery-ui.css' />
+  </head>
+  <body>
+  <div class="login">
+    <h1 class="login-tit">{{title}}</h1>
+    <form method="post" class="ui-form reg-form">
+      <table>
+        <tr>
+          <td class="ui-tag">用户名：</td>
+          <td>
+              <input class="ui-control ui-control-box ui-contol-full" type="text" name="name">
+          </td>
+        </tr>
+        <tr>
+          <td class="ui-tag">真实姓名：</td>
+          <td>
+              <input class="ui-control ui-control-box ui-contol-full" type="text" name="fullname">
+          </td>
+        </tr>
+        <tr>
+          <td class="ui-tag">密码：</td>
+          <td>
+              <input class="ui-control ui-control-box ui-contol-full" type="password" name="password">
+          </td>
+        </tr>
+        <tr>
+          <td class="ui-tag">确认密码：</td>
+          <td>
+              <input class="ui-control ui-control-box ui-contol-full" type="password" name="password-repeat">
+          </td>
+        </tr>
+        <tr>
+            <td class="ui-tag">邮箱：</td>
+            <td>
+                <input class="ui-control ui-control-box ui-contol-full" type="text" name="email">
+            </td>
+        </tr>
+        <tr>
+            <td class="ui-tag"></td>
+            <td>
+                <input type="submit" class="ui-button ui-button-primary" value="注册">
+            </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+
+  </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <meta charset="utf-8" />
+    <link rel='stylesheet' href='/stylesheets/jquery-ui.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/fullcalendar.css' />
+    <script>var currentUser = "{{user.name}}";</script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="header">
+        <div class="header-main">
+          <div class="header-user">
+            <div class="header-user-pic"><a href="#"><img class="ui-border-box header-user-img" src="/images/head.png" width="80" height="80" alt=""></a></div>
+            <h6 class="header-user-name">admin</h6>
+          </div>
+          <nav class="navigation">
+            <ul class="navigation-list">
+              <li class="navigation-item"><a href="#">统计中心</a></li>
+              <li class="navigation-item"><a href="#">事件</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="recently" id="recently">
+            <h4>拖放最近事件</h4>
+            <ul id='recently-events' class="recently-events"></ul>
+            <p>
+                <input type='checkbox' id='drop-remove' />
+                <label for='drop-remove'>拖放后移除</label>
+            </p>
+        </div>
+      </header>
+      <div class="container">
+        <div class="ui-border-box bar">
+          <a href="#" class="bar-btn bar-menu-btn ui-iconfont" id="bar-menu-btn">&#xe600;</a>
+          <div class="search" id="search">
+          </div>
+          <div class="bar-more">
+            <a href="#" class="ui-border-box bar-more-btn ui-iconfont">&#xe601;</a>
+            <nav class="bar-more-nav">
+              <ul class="bar-more-list clear">
+                  <li class="ui-border-box bar-more-item">
+                    <a href="#google"><span class="bar-more-icon ui-iconfont">&#xe60b;</span>
+                    <span class="bar-more-txt">导入</span></a>
+                  </li>
+                  <li class="ui-border-box bar-more-item">
+                    <a href="#group"><span class="bar-more-icon ui-iconfont">&#xe607;</span>
+                    <span class="bar-more-txt">用户组</span></a>
+                  </li>
+                  <li class="ui-border-box bar-more-item">
+                    <a href="#" id="bar-more-mail"><span class="bar-more-icon ui-iconfont">&#xe608;</span>
+                    <span class="bar-more-txt">发送邮件</span></a>
+                  </li>
+                  <li class="ui-border-box bar-more-item">
+                    <a href="#archive/user/admin"><span class="bar-more-icon ui-iconfont">&#xe604;</span>
+                    <span class="bar-more-txt">周报</span></a>
+                  </li>
+                  <li class="ui-border-box bar-more-item">
+                    <a href="#"><span class="bar-more-icon ui-iconfont">&#xe60a;</span>
+                    <span class="bar-more-txt">月报</span></a>
+                  </li>
+                  {{#if user }}
+                  <li class="ui-border-box bar-more-item">
+                    <a href="/logout"><span class="bar-more-icon ui-iconfont">&#xe609;</span>
+                    <span class="bar-more-txt">退出</span></a>
+                  </li>
+                  {{/if}}
+              </ul>
+            </nav>
+          </div>
+        </div>
+        {{#if success}}
+          <div class="ui-server-tip ui-server-tip-sucess fadeOutUp">{{success}}</div>
+        {{/if}}
+        {{#if error }}
+          <div class="ui-server-tip ui-server-tip-error fadeOutUp">{{error}} </div>
+        {{/if}}
+
+        {{{body}}}
+        <div class="footer">Powered by <code>p_jdjbli</code>&copy;2014-2125<br />All rights reserved</div>
+      </div>
+    </div>
+    <script data-main="/javascripts/main" src="/javascripts/lib/require.js"></script>
+  </body>
+</html>
