@@ -2,6 +2,8 @@
 -------------
 ###宣传视频
 
+http://v.youku.com/v_show/id_XODY5ODkwMDY0.html
+
 ###项目技术：
 
 Node.js/MongoDB/，数据模型增删改、模型集合、集合监听、模版引擎，路由控制/模块化加载 
