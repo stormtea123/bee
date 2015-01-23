@@ -3,10 +3,8 @@
   <head>
     <title>{{title}}</title>
     <meta charset="utf-8" />
-    <link rel='stylesheet' href='/build/stylesheets/jquery-ui.css' />
     <link rel='stylesheet' href='/build/stylesheets/style.css' />
-    <link rel='stylesheet' href='/build/stylesheets/fullcalendar.css' />
-    <script>var currentUser = "{{user.name}}";</script>
+    <script>var currentUser = "{{user.name}}";var currentFullName = "{{user.fullname}}";</script>
   </head>
   <body>
     <div class="wrap">
@@ -18,7 +16,7 @@
           </div>
           <nav class="navigation">
             <ul class="navigation-list">
-              <li class="navigation-item"><a href="#">统计中心</a></li>
+              <li class="navigation-item"><a href="/analycis">统计中心</a></li>
               <li class="navigation-item"><a href="#">事件</a></li>
             </ul>
           </nav>
@@ -50,7 +48,7 @@
                     <span class="bar-more-txt">用户组</span></a>
                   </li>
                   <li class="ui-border-box bar-more-item">
-                    <a href="#" id="bar-more-mail"><span class="bar-more-icon ui-iconfont">&#xe608;</span>
+                    <a href="#sendMail" id="bar-more-mail"><span class="bar-more-icon ui-iconfont">&#xe608;</span>
                     <span class="bar-more-txt">发送邮件</span></a>
                   </li>
                   <li class="ui-border-box bar-more-item">

@@ -5,10 +5,16 @@ define([
     "moment",
     "view/search",
     "view/group",
+    "view/mail",
     "view/syncCalendar",
     "controller/search",
     "controller/calendar",
-], function($, _, Backbone, moment, ViewSearch, ViewGroup, SyncCalendar, ControllerSearch, Calendar) {
+    "controller/defaultTime",
+], function($, _, Backbone, moment, ViewSearch, ViewGroup, ViewMail, SyncCalendar, ControllerSearch, Calendar, DefaultTime) {
+    var $container = $(".container");
+    var $main = $("#main");
+    var windowHeight = window.innerHeight;
+    $main.css({"min-height":windowHeight-59-67-40});
     //最近记录列表
     $.ajax({
         type: "get",
@@ -41,23 +47,8 @@ define([
             });
         }
     });
-    var $container = $(".container");
-    var $main = $("#main");
     
-    var now = new Date();
-    var startInitDay = moment().subtract(now.getDay() + 1, "days").format().substr(0, 10);
-    var endInitDay = moment().subtract(-(7 - (now.getDay() + 1)), "days").format().substr(0, 10);
-    //匹配邮件发送地址
-    var locationHash = location.hash;
-    var matchGroupRule = /archive\/group\/([^\/]+)/;
-    var matchGroupName = matchGroupRule.test(locationHash) ? matchGroupRule.exec(locationHash)[1] : "test";
-    $("#bar-more-mail").attr("href", '#groupTomail/' + matchGroupName + '/' + startInitDay + '/' + endInitDay);
-    $(window).bind('hashchange', function() {
-        matchGroupName = matchGroupRule.test(location.hash) ? matchGroupRule.exec(location.hash)[1] : "test";
-        $("#bar-more-mail").attr("href", '#groupTomail/' + matchGroupName + '/' + startInitDay + '/' + endInitDay);
-    });
-    
-    $("#bar-more-week").attr("href", '#archive/user/' + currentUser + '/' + startInitDay + '/' + endInitDay);
+    $("#bar-more-week").attr("href", '#archive/user/' + currentUser + '/' + DefaultTime.start + '/' + DefaultTime.end);
         //显示最近创建的事件列表
     $("#bar-menu-btn").click(function(event) {
         event.preventDefault();
@@ -86,6 +77,7 @@ define([
             'user/:name': 'swtichUser',
             'group': 'group',
             'google': 'syncCalendar',
+            'sendMail': 'sendMail',
             'archive/user/:name/:start/:end': 'archiveUser',
             'archive/group/:name/:start/:end': 'archiveGroup',
             'userToMail/:name/:start/:end/:mail': 'userToMail',
@@ -109,12 +101,6 @@ define([
                 isHaveCalendar = false;
             }
             var that = this;
-            var addGroupTemplate = '<div id="group-dialog" title="新建用户组" style="display:none;"><form method="post" class="ui-form group-form" id="group-form"><table class="group-form-table"><tr><td class="ui-tag"><label class="group-form-label" for="group-title">组名：</label></td><td><input type="text" name="title" id="group-title" class="ui-control ui-control-box ui-control-normal" placeholder="用户组名称"></td></tr><tr><td class="ui-tag"><label class="group-form-label" for="group-members">成员：</label></td><td><textarea name="members" id="group-members" class="ui-control ui-control-box ui-control-normal" placeholder="用户名用英文状态逗号分割"></textarea></td></tr><tr><td class="ui-tag"><label class="group-form-label" for="group-mail">邮件账号：</label></td><td><input type="text" name="mail" id="group-mail" class="ui-control ui-control-box ui-control-normal" placeholder="抄送群组邮件名"></td></table></form></div><div class="group-list" id="group-main"></div>';
-            $main.html(addGroupTemplate);
-            $("#group-form").unbind().submit(function(e) {
-                e.preventDefault();
-                $(".ui-dialog-buttonset button:eq(0)").trigger("click");
-            });
             //用户组模型
             var GroupModel = Backbone.Model.extend({
                 defaults: {
@@ -151,11 +137,13 @@ define([
             var groupCollection = new GroupCollection();
             groupCollection.fetch({
                 success: function(collection, response, options) {
-                    var viewGroup = new ViewGroup({
-                        collection: collection,
-                        el: $("#group-main")
-                    }).render();
-                    that.changeView(viewGroup);
+                    // var viewGroup = new ViewGroup({
+                    //     collection: collection,
+                    //     el: $("#group-main")
+                    // }).render();
+                    that.changeView(new ViewGroup({
+                        collection: collection
+                    }));
                 },
                 error: function(collection, response, options) {
                     console.log(response.statusText);
@@ -171,7 +159,7 @@ define([
                 isHaveCalendar = false;
             }
             var that = this;
-            $main.html('<ul class="sync-history-list" id="sync-history-list"></ul>')
+            //$main.html('')
                 //用户组模型
             var historyModel = Backbone.Model.extend({
                 defaults: {
@@ -211,12 +199,15 @@ define([
             var historyCollection = new HistoryCollection();
             historyCollection.fetch({
                 success: function(collection, response, options) {
-                    var syncCalendar = new SyncCalendar({
+                    // var syncCalendar = new SyncCalendar({
+                    //     collection: collection,
+                    //     el: $main
+                    // }).render();
+                    that.changeView(new SyncCalendar({
                         collection: collection,
-                        el: $main
-                    }).render();
-                    that.changeView(syncCalendar);
-                    //出发日历下拉组件
+                        //el: $main
+                    }));
+                    //日历下拉组件
                     $("#from").datepicker({
                         //defaultDate: "-1w",
                         dateFormat: "yy-mm-dd",
@@ -264,15 +255,15 @@ define([
                 data: {
                     user: name,
                     start: start,
-                    end: end
+                    end: moment(end).add(1,"days").format()
                 },
                 scriptCharset: "utf-8"
             }).done(function(data) {
                 var archiveData = data.list;
                 var len = archiveData.length;
                 var type = ["工作需求", "自主学习", "其它"];
-                var statusNote = ["未完成", "完成中", "已完成"];
-                var ret = '<table class="ui-table"><caption>周报(' + start + '至' + end + ')</caption><thead><th>姓名</th><th>任务</th><th>时间段</th><th>本周耗时</th><th>状态</th><th>备注</th></thead><tbody class="ui-tbody">';
+                var statusNote = ["未完成", "进行中", "已完成"];
+                var ret = '<table class="ui-table"><caption>周报(' + start + '至' + end + ')</caption><thead><th width="60">姓名</th><th>任务</th><th width="270">时间段</th><th width="60">本周耗时</th><th width="60">状态</th><th width="180">备注</th></thead><tbody class="ui-tbody">';
                 for (var i = 0; i < len; i++) {
                     if (i == 0) {
                         ret += '<tr><td class="ui-center" rowspan="' + len + '">' + archiveData[i].user + '</td><td class="archive-task">' + archiveData[i].title + '(' + type[Number(archiveData[i].type) - 1] + ')</td><td class="ui-center">' + archiveData[i].start + '至' + archiveData[i].end + '</td><td class="ui-center">' + ((new Date(archiveData[i].end).getTime() - new Date(archiveData[i].start).getTime()) / (1000 * 60 * 60)).toFixed(2) + '时</td><td class="ui-center">' + statusNote[Number(archiveData[i].status) - 1] + '</td><td class="ui-center">' + archiveData[i].remark + '</td></tr>';
@@ -292,7 +283,7 @@ define([
                 isHaveCalendar = false;
             }
             var type = ["工作需求", "自主学习", "其它"];
-            var statusNote = ["未完成", "完成中", "已完成"];
+            var statusNote = ["未完成", "进行中", "已完成"];
             var willHtml = '<table class="ui-table"><caption>周报(' + start + '至' + end + ')</caption><thead><th>姓名</th><th>任务</th><th>时间段</th><th>本周耗时</th><th>状态</th><th>备注</th></thead><tbody class="ui-tbody">';
             $.ajax({
                 type: "get",
@@ -314,7 +305,7 @@ define([
                         data: {
                             user: members[mi],
                             start: start,
-                            end: end
+                            end: moment(end).add(1,"days").format()
                         },
                         scriptCharset: "utf-8"
                     }).done(function(data) {
@@ -339,60 +330,45 @@ define([
             });
 
         },
-        userToMail: function(name, start, end, mail) {
-            var isShureToSend = confirm("您确定要发送吗？")
-            if (!isShureToSend) return;
-            $.ajax({
-                type: "get",
-                url: "/api/userToMail?callback=?",
-                dataType: "jsonp",
-                data: {
-                    userName: name,
-                    start: start,
-                    end: end,
-                    mail: mail || ""
-                },
-                scriptCharset: "utf-8"
-            }).done(function(data) {
-                $("#progress-bar span").css("width", "100%");
-                $("#progress-dialog").dialog("destroy");
-            });
-        },
-        groupToMail: function(name, start, end) {
-            var isShureToSend = confirm("您确定要发送吗？")
-            if (!isShureToSend) return;
-            $("#progress-dialog").dialog({
-                modal: true,
-                width: 428,
-                open: function(event, ui) {
-                    $(this).parent().focus();
-                    $("#progress-bar span").css("width", "50%");
+        sendMail: function(){
+            document.title = "发送邮件-小蜜蜂"
+            if (isHaveCalendar) {
+                //销毁日历
+                Calendar.destroy();
+                isHaveCalendar = false;
+            }
+            this.changeView(new ViewMail({
+                //el: $main
+            }));
+            //日历下拉组件
+            $("#from").datepicker({
+                //defaultDate: "-1w",
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                numberOfMonths: 2,
+                onClose: function(selectedDate) {
+                    $("#to").datepicker("option", "minDate", selectedDate);
                 }
             });
-            $.ajax({
-                type: "get",
-                url: "/api/groupToMail?callback=?",
-                dataType: "jsonp",
-                data: {
-                    groupName: name,
-                    start: start,
-                    end: end
-                },
-                scriptCharset: "utf-8"
-            }).done(function(data) {
-                $("#progress-bar span").css("width", "100%");
-                $("#progress-dialog").dialog("destroy");
+            $("#to").datepicker({
+                //defaultDate: "+1w",
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                numberOfMonths: 2,
+                onClose: function(selectedDate) {
+                    $("#from").datepicker("option", "maxDate", selectedDate);
+                }
             });
         },
         //切换视图
         changeView: function(view) {
             if (this.currentView) {
-                console.log(this.currentView)
                 if (this.currentView == view) {
                     return;
                 }
                 this.currentView.remove();
             }
+            $main.html(view.render().el)
             this.currentView = view;
         }
     })

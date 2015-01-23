@@ -16,7 +16,7 @@ var transporter = nodemailer.createTransport(smtpPool({
 }));
 // setup e-mail data with unicode symbols
 var mailOptions = {
-    from: 'Fred Foo ✔ <498401337@qq.com>', // sender address
+    from: 'Fred Foo ✔ <stormtea@qq.com>', // sender address
     to: '1280597658@qq.com', // list of receivers
     subject: 'Hello ✔', // Subject line
     text: 'Hello world 2 ✔', // plaintext body

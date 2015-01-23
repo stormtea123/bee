@@ -3,8 +3,9 @@ define([
     "underscore",
     "backbone",
     "moment",
+    "controller/defaultTime",
     "jqueryUI"
-], function($, _, Backbone, moment) {
+], function($, _, Backbone, moment, DefaultTime) {
     //导入记录视图
     var HistoryView = Backbone.View.extend({
         tagName:'li',
@@ -44,6 +45,8 @@ define([
     });
     //导入记录集合
     var HistoryCollectionView = Backbone.View.extend({
+        tagName:"ul",
+        className:"sync-history-list",
         initialize: function() {
             this.listenTo(this.collection, 'add', this.render, this);
         },
@@ -60,7 +63,7 @@ define([
     //同步视图
     var SyncView =  Backbone.View.extend({
         tagName: "div",
-        className: "sync-calendar",
+        className: "sync-calendar-main",
         initialize: function() {
             //this.render();
         },
@@ -82,7 +85,7 @@ define([
                         </tr>\
                         <tr>\
                             <td class="ui-tag">时间段：</td>\
-                            <td><input class="ui-control ui-control-box" type="input" id="from" name="from" placeholder="开始时间" />&nbsp;&nbsp;<input class="ui-control ui-control-box" type="input" id="to" name="to" placeholder="结束时间" /></td>\
+                            <td><input class="ui-control ui-control-box" type="input" id="from" name="from" value="'+DefaultTime.start+'" />&nbsp;&nbsp;<input class="ui-control ui-control-box" type="input" id="to" name="to" value="'+DefaultTime.end+'"/></td>\
                         </tr>\
                         <tr>\
                             <td class="ui-tag"></td>\
@@ -93,6 +96,23 @@ define([
                     </table>\
                 </form>\
             ');
+            return this;
+        }
+        
+    });
+    return Backbone.View.extend({
+        tagName: "div",
+        className: "sync-calendar",
+        initialize: function() {
+            //this.render();
+        },
+        render: function(){
+            $(this.el).html(new HistoryCollectionView({
+                collection:this.collection
+            }).render().el);
+            $(this.el).append(new SyncView({
+                collection:this.collection
+            }).render().el);
             return this;
         },
         events: {
@@ -194,18 +214,6 @@ define([
                     }
                 })
             }
-
-        }
-    });
-    return Backbone.View.extend({
-        render: function(){
-            $(this.el).append(new HistoryCollectionView({
-                collection:this.collection,
-                el:$("#sync-history-list")
-            }).render().el);
-            $(this.el).append(new SyncView({
-                collection:this.collection
-            }).render().el);
 
         }
     })

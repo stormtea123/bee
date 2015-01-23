@@ -1,6 +1,5 @@
 define([
     "jquery",
-    "jqueryUI",
     "fullcalendar",
     "./zh-cn"
 ], function($) {
@@ -21,9 +20,11 @@ define([
                 right: "month,agendaWeek,agendaDay"
             },
             //默认显示周视图
-            defaultView: "agendaWeek",
+            //defaultView: "agendaWeek",
+            defaultView: "month",
             lang: 'zh-cn',
             selectable: true,
+            unselectCancel: "#event-form,.ui-dialog-buttonpane",
             editable: true,
             eventLimit: true, // allow "more" link when too many events
             //周计数
@@ -159,12 +160,11 @@ define([
                                             $(that).dialog("close");
                                             $calendar.fullCalendar('removeEvents');
                                             $calendar.fullCalendar('refetchEvents');
-                                            return;
+                                            $calendar.fullCalendar("unselect");
                                         }
                                     }
                                 });
                             }
-                            $calendar.fullCalendar("unselect");
                         }
                     }, {
                         text: "取消",
