@@ -1,50 +1,54 @@
-<div id='main' class="main"></div>
-<div id="event-dialog" title="编辑事件" style="display:none;">
-    <form method="post" class="ui-form event-form" id="event-form">
-        <table class="event-form-table">
-            <tr>
-                <td class="ui-tag">
-                    <label class="event-form-label" for="event-type">类型：</label>
-                </td>
-                <td>
-                    <select name="type" id="event-type">
-                        <option value="1">工作记录</option>
-                        <option value="2">自主学习</option>
-                        <option value="3">其它</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="ui-tag">
-                    <label class="event-form-label" for="event-title">标题：</label>
-                </td>
-                <td>
-                    <input type="text" name="title" id="event-title" class="ui-control ui-control-box ui-control-normal" placeholder="在这里输入标题">
-                </td>
-            </tr>
-            <tr>
-                <td class="ui-tag">
-                    <label class="event-form-label" for="event-remark">备注：</label>
-                </td>
-                <td>
-                    <textarea name="remark" id="event-remark" class="ui-control ui-control-box ui-control-normal" placeholder="在这里输入备注"></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td class="ui-tag">
-                    <label class="event-form-label" for="event-status">状态：</label>
-                </td>
-                <td>
-                    <select name="status" id="event-status">
-                        <option value="1">未开始</option>
-                        <option value="2">进行中</option>
-                        <option value="3">已完成</option>
-                        <option value="4">删除</option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-    </form>
-</div>
-<div id="progress-dialog" title="数据交互状态" style="display:none;"><div class="progress-main"><div class="progress-bar green stripes" id="progress-bar"><span style="width: 0%"></span></div></div></div>
-
+                <div id='main' class="main"></div>
+                <div id="event-dialog" title="编辑事件" style="display:none;">
+                    <form method="post" class="ui-form event-form" id="event-form">
+                        <table class="event-form-table">
+                            <tr>
+                                <td class="ui-tag">
+                                    <label class="event-form-label" for="event-type">类型：</label>
+                                </td>
+                                <td>
+                                    <select name="type" id="event-type">
+                                        <option value="1">工作记录</option>
+                                        <option value="2">自主学习</option>
+                                        <option value="3">其它</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ui-tag">
+                                    <label class="event-form-label" for="event-title">标题：</label>
+                                </td>
+                                <td>
+                                    <input type="text" name="title" id="event-title" class="ui-control ui-control-box ui-control-normal" placeholder="在这里输入标题">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ui-tag">
+                                    <label class="event-form-label" for="event-remark">备注：</label>
+                                </td>
+                                <td>
+                                    <textarea name="remark" id="event-remark" class="ui-control ui-control-box ui-control-normal" placeholder="在这里输入备注"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ui-tag">
+                                    <label class="event-form-label" for="event-status">状态：</label>
+                                </td>
+                                <td>
+                                    <select name="status" id="event-status">
+                                        <option value="1">未开始</option>
+                                        <option value="2">进行中</option>
+                                        <option value="3">已完成</option>
+                                        <option value="4">删除</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <div id="progress-dialog" title="数据交互状态" style="display:none;">
+                    <div class="progress-main">
+                        <div class="progress-bar green stripes" id="progress-bar"><span style="width: 0%"></span>
+                        </div>
+                    </div>
+                </div>
