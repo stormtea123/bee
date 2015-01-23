@@ -19,7 +19,7 @@ var transporter = nodemailer.createTransport({
     host: 'smtp.qq.com',
     auth: {
         user: 'stormtea@qq.com',
-        pass: '19100biao*'
+        pass: '123'
     }
 });
 

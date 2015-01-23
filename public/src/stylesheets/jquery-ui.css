@@ -942,6 +942,7 @@
 /* Overlays */
 
 .ui-widget-overlay {
+    z-index:100;
     background: rgba(0, 0, 0, 0.2);
 }
 .ui-widget-shadow {
@@ -1304,10 +1305,10 @@ button.ui-button::-moz-focus-inner {
     background-color: #FFFFFF;
     box-shadow: 0 20px 30px rgba(0,0,0,0.1);
     border:none;
+    z-index:101;
 }
 .ui-dialog .ui-dialog-titlebar {
     /*padding: .4em 1em;*/
-    
     position: relative;
     padding: 5px 15px;
     border: 0px 0px 0px 1px solid;
