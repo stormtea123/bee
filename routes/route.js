@@ -14,15 +14,14 @@ var crypto = require('crypto'),
     Record = require('../models/record.js');
 //配置邮件服务
 var nodemailer = require('nodemailer');
-var smtpPool = require('nodemailer-smtp-pool');
 // create reusable transporter object using SMTP transport
-var transporter = nodemailer.createTransport(smtpPool({
+var transporter = nodemailer.createTransport({
     host: 'smtp.qq.com',
     auth: {
         user: 'stormtea@qq.com',
         pass: '19100biao*'
     }
-}));
+});
 
 module.exports = function(app) {
     app.get('/', checkLogin);
@@ -115,11 +114,19 @@ module.exports = function(app) {
             res.redirect('/'); //登陆成功后跳转到主页
         });
     });
-
+    //退出
     app.get('/logout', function(req, res) {
         req.session.user = null;
         req.flash('sucess', '登出成功！');
         res.redirect('/login'); //等出成功后跳转到主页
+    });
+    //统计中心
+    app.get('/analysis', checkLogin);
+    app.get("/analysis", function(req, res) {
+        res.render("analycis", {
+            title: "统计中心"
+        });
+        //code here ...
     });
     //获取用户组
     app.get('/api/getGroups', function(req, res) {
@@ -233,13 +240,14 @@ module.exports = function(app) {
     });
     //发送单用户邮件
     app.get('/api/userToMail', function(req, res) {
+        var fullname = req.param('fullname');
         var user = req.param('userName');
         var start = req.param('start');
         var end = req.param('end');
-        var type = ["工作需求","自主学习","其它"];
-        var statusNote = ["未完成","完成中","已完成"];
-        var willSend = '<table width="100%" cellspacing="0" cellpadding="0" style="font-size:14px; border-collapse:collapse;border:1px solid #ddd; line-height:1.5; color:#666;"><caption style="padding:7px 0; color:#000; line-height:1;">周报('+start+'至'+end+')</caption><thead><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">姓名</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">任务</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">时间段</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">本周耗时</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">状态</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">备注</th></thead><tbody style="font-size:12px;">';
         var mailTo = req.param('mail')||"";
+        var type = ["工作需求","自主学习","其它"];
+        var statusNote = ["未完成","进行中","已完成"];
+        var willSend = '<table width="100%" cellspacing="0" cellpadding="0" style="font-size:14px; border-collapse:collapse;border:1px solid #ddd; line-height:1.5; color:#666;"><caption style="padding:7px 0; color:#000; line-height:1;">'+fullname+'周报('+start+'至'+end+')</caption><thead><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:60px;">姓名</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">任务</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:270px">时间段</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:60px;">本周耗时</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:60px;">状态</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:180px;">备注</th></thead><tbody style="font-size:12px;">';
         Note.getAll(user,start,end,function(err, notes){
             var archiveData = notes;
             var len = archiveData.length;
@@ -257,10 +265,10 @@ module.exports = function(app) {
             // setup e-mail data with unicode symbols
             var mailOptions = {
                 from: '李金标 <stormtea@qq.com>', // sender address
-                to: '1280597658@qq.com', // list of receivers
-                cc: mailTo, // list of receivers
-                subject: '周报('+start+'至'+end+')', // Subject line
-                text: 'Hello world 2', // plaintext body
+                to: mailTo, // list of receivers
+                //cc: '1280597658@qq.com', // list of receivers
+                subject: fullname+'周报('+start+'至'+end+')', // Subject line
+                text: start+'至'+end, // plaintext body
                 html: willSend+'<p style="margin:0; padding:7px; line-height:1; text-align:center; font-size:12px; color:#999; ">本邮件由小蜜蜂报表系统自动发送</p>'
             };
             transporter.sendMail(mailOptions, function(error, info) {
@@ -288,8 +296,8 @@ module.exports = function(app) {
         var start = req.param('start');
         var end = req.param('end');
         var type = ["工作需求","自主学习","其它"];
-        var statusNote = ["未完成","完成中","已完成"];
-        var willSend = '<table width="100%" cellspacing="0" cellpadding="0" style="font-size:14px; border-collapse:collapse;border:1px solid #ddd; line-height:1.5; color:#666;"><caption style="padding:7px 0; color:#000; line-height:1;">周报('+start+'至'+end+')</caption><thead><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">姓名</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">任务</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">时间段</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">本周耗时</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">状态</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">备注</th></thead><tbody style="font-size:12px;">';
+        var statusNote = ["未完成","进行中","已完成"];
+        var willSend = '<table width="100%" cellspacing="0" cellpadding="0" style="font-size:14px; border-collapse:collapse;border:1px solid #ddd; line-height:1.5; color:#666;"><caption style="padding:7px 0; color:#000; line-height:1;">'+groupName+'周报('+start+'至'+end+')</caption><thead><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:60px;">姓名</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;">任务</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:270px">时间段</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:60px;">本周耗时</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:60px;">状态</th><th style="padding:3px 5px; border:solid 1px #ddd; background:#F7F6F5;width:180px;">备注</th></thead><tbody style="font-size:12px;">';
         //取到抄送地址
         Group.getByName(groupName,function(err, groupObject){
             var mailTo = groupObject.mail;
@@ -321,12 +329,13 @@ module.exports = function(app) {
                 // setup e-mail data with unicode symbols
                 var mailOptions = {
                     from: '李金标 <stormtea@qq.com>', // sender address
-                    to: '1280597658@qq.com', // list of receivers
-                    subject: '周报('+start+'至'+end+')', // Subject line
-                    text: 'Hello world 2', // plaintext body
+                    to: mailTo, // list of receivers
+                    //cc: '1280597658@qq.com', // list of receivers
+                    subject: groupName+'周报('+start+'至'+end+')', // Subject line
+                    text: start+'至'+end, // plaintext body
                     html: willSend+'<p style="margin:0; padding:7px; line-height:1; text-align:center; font-size:12px; color:#999; ">本邮件由小蜜蜂报表系统自动发送</p>'
                 };
-                                transporter.sendMail(mailOptions, function(error, info) {
+                transporter.sendMail(mailOptions, function(error, info) {
                     if (error) {
                         console.log(error);
                     } else {

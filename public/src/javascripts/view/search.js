@@ -1,7 +1,7 @@
 define([
     "jquery",
     "underscore",
-    "backbone"
+    "backbone",
 ], function($, _, Backbone) {
 
     //搜索视图

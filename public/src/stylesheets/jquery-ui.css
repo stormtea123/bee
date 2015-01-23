@@ -1412,8 +1412,6 @@ button.ui-button::-moz-focus-inner {
     background-repeat: repeat-x;
     background: rgb(76, 142, 250);
 }
-.ui-dialog-buttonpane .ui-dialog-buttonset :hover { box-shadow: 0 1px 3px rgba(0, 0, 0, .50); }
-
 /*
  * jQuery UI Slider 1.8.16
  *

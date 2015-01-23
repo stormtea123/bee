@@ -2,8 +2,8 @@ define([
     "jquery",
     "underscore",
     "backbone",
-    "jqueryUI",
-    "view/search"
+    "view/search",
+    "jqueryUI"
 ], function($, _, Backbone, ViewSearch) {
     return function(){
         //搜索自动完成
