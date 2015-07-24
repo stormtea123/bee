@@ -2,7 +2,7 @@
 -------------
 ###宣传视频
 
-http://v.youku.com/v_show/id_XODY5ODkwMDY0.html
+<iframe class="video_iframe" style=" z-index:1; " src="http://v.qq.com/iframe/player.html?vid=w0160mby1rr&amp;width=480&amp;height=360&amp;auto=0" allowfullscreen="" frameborder="0" height="360" width="480"></iframe>
 
 ###项目技术：
 
